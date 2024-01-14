@@ -1,11 +1,12 @@
-import 'package:firebase/Login.dart';
-import 'package:firebase/Signup.dart';
+import 'package:firebase/Auth/Login.dart';
+import 'package:firebase/Catigories/Add.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'Auth/Signin.dart';
 import 'HomePage.dart';
-import 'firebase_options.dart';
+import 'Auth/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +38,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
 appBarTheme: AppBarTheme(
   backgroundColor: Colors.grey[50],
-
+  titleTextStyle: TextStyle(color: Colors.orange,fontSize: 17,fontWeight: FontWeight.bold),
+    iconTheme: IconThemeData(
+    color: Colors.orange,
+)
 ),
       ),
       debugShowCheckedModeBanner: false,
@@ -49,6 +53,7 @@ appBarTheme: AppBarTheme(
         "signup": (context) => SignUp(),
         "login": (context) => Login(),
         "homePage": (context) => HomePage(), // Make sure this is defined
+      "addcategory":(context)=>AddCategory(),
       },
     );
   }

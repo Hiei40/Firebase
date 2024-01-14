@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'Components/CustomButtonAuth.dart';
-import 'Components/TextFormField.dart';
-import 'Components/customlogoauth.dart';
+import '../Components/CustomButtonAuth.dart';
+import '../Components/TextFormField.dart';
+import '../Components/customlogoauth.dart';
 
 class SignUp extends StatelessWidget {
   final TextEditingController username = TextEditingController();
@@ -36,7 +36,7 @@ class SignUp extends StatelessWidget {
               ),
               Container(height: 10),
               CustomTextForm(
-                  hinttext: "Enter Your username", mycontroller: username),
+                  hinttext: "Enter Your username", mycontroller: username, validator: (String? value) {  },),
               Container(height: 20),
               const Text(
                 "Email",
@@ -44,7 +44,7 @@ class SignUp extends StatelessWidget {
               ),
               Container(height: 10),
               CustomTextForm(
-                  hinttext: "Enter Your Email", mycontroller: Email),
+                  hinttext: "Enter Your Email", mycontroller: Email, validator: (String? value ) {  },),
               Container(height: 10),
               const Text(
                 "Password",
@@ -52,7 +52,7 @@ class SignUp extends StatelessWidget {
               ),
               Container(height: 10),
               CustomTextForm(
-                  hinttext: "Enter Your Password", mycontroller: password),
+                  hinttext: "Enter Your Password", mycontroller: password, validator: (String? value) {  },),
               Container(
                 margin: const EdgeInsets.only(top: 10, bottom: 20),
                 alignment: Alignment.topRight,

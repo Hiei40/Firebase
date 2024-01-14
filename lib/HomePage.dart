@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-import 'Login.dart';
+import 'Auth/Login.dart';
+import 'Catigories/Add.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -9,11 +11,24 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddCategory()),
+          );        },
+        backgroundColor: Colors.orange,
+        child: Icon(Icons.add),
+
+      ),
       appBar: AppBar(
         title: Text("FireBase"),
         actions: [
           IconButton(
             onPressed: () async {
+              GoogleSignIn googlesignIn = GoogleSignIn();
+              googlesignIn.disconnect();
+
               await FirebaseAuth.instance.signOut();
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => Login()),
@@ -24,19 +39,36 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: ListView(
+      body: GridView(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, mainAxisExtent: 250),
         children: [
-          (FirebaseAuth.instance.currentUser!.emailVerified)
-              ? Text('Welcome')
-              : MaterialButton(
-                  child: Text(
-                    'please Verfied Email',
-                  ),
-                  onPressed: () {
-                    FirebaseAuth.instance.currentUser!.sendEmailVerification();
-                  },
-                  color: Colors.blue,
-                ),
+          Card(
+            child: Column(
+              children: [
+                Container(
+                    child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Image.asset(
+                      "Image/kisspng-emoji-file-folders-directory-computer-icons-txt-file-5acd8ad8c2a790.3510068315234198647973.png"),
+                )),
+                Text("Company")
+              ],
+            ),
+          ),
+          Card(
+            child: Column(
+              children: [
+                Container(
+                    child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Image.asset(
+                      "Image/kisspng-emoji-file-folders-directory-computer-icons-txt-file-5acd8ad8c2a790.3510068315234198647973.png"),
+                )),
+                Text("Home")
+              ],
+            ),
+          ),
         ],
       ),
     );
