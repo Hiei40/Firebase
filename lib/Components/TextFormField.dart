@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 class CustomTextForm extends StatelessWidget {
-  const CustomTextForm({super.key, required this.hinttext, required this.mycontroller});
-final String hinttext;
-final TextEditingController mycontroller;
+  CustomTextForm({Key? key, required this.hinttext, required this.mycontroller,required this.validator});
 
-@override
+  final String hinttext;
+  final TextEditingController mycontroller;
+  final String? Function(String?)? validator;
+
+  @override
   Widget build(BuildContext context) {
-    return   TextFormField(
-controller: mycontroller,
+    return TextFormField(
+      validator: validator,
+      controller: mycontroller,
       decoration: InputDecoration(
         hintText: hinttext,
         hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
@@ -24,6 +27,6 @@ controller: mycontroller,
           borderSide: BorderSide(color: Color.fromARGB(255, 190, 190, 190)),
         ),
       ),
-    ) ;
+    );
   }
 }
