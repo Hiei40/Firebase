@@ -15,14 +15,17 @@ class _AddCategoryState extends State<AddCategory> {
 TextEditingController name=TextEditingController();
   CollectionReference categories = FirebaseFirestore.instance.collection('categories');
 
-  Future<void> addUser() {
-    // Call the user's CollectionReference to add a new user
-    return categories
-        .add({
-      'name': name.text,
-    })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
+addUser() async{
+    if(formState.currentState!.validate()){
+      try{
+        DocumentReference response =await categories.add({"name": name.text});
+        Navigator.of(context).pushReplacementNamed("homepage");
+        print(response);
+      }catch(e){
+        print("Error $e");
+      }
+
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,6 @@ TextEditingController name=TextEditingController();
           ),
          Custombuttonauth(onPressed: (){
            addUser();
-
          }, Title: "add")
         ],
       ),
