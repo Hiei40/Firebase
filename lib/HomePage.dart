@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -68,27 +69,36 @@ class _HomePageState extends State<HomePage> {
               ),
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
-                Map<String, dynamic> categoryData =
-                    data[index].data() as Map<String, dynamic>;
 
-                // Make sure to check if 'categories' and 'name' fields exist
-                String categoryName = categoryData.containsKey('name')
-                    ? categoryData['name'].toString()
-                    : 'No Category';
-
-                return Card(
-                  child: Column(
-                    children: [
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Image.asset(
-                            "Image/kisspng-emoji-file-folders-directory-computer-icons-txt-file-5acd8ad8c2a790.3510068315234198647973.png",
+                return InkWell(
+                  onLongPress: (){
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.rightSlide,
+                      title: 'Error',
+                      desc: 'هل انتا متاكد من عمليه الحذف',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: ()async{
+                        await FirebaseFirestore.instance.collection("categories").doc(data[index].id).delete();
+                     Navigator.of(context).pushReplacementNamed("homePage");
+                      },
+                    ).show();
+                  },
+                  child: Card(
+                    child: Column(
+                      children: [
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Image.asset(
+                              "Image/kisspng-emoji-file-folders-directory-computer-icons-txt-file-5acd8ad8c2a790.3510068315234198647973.png",
+                            ),
                           ),
                         ),
-                      ),
-                      Text(categoryName),
-                    ],
+                        Text("${data[index]['name']}"),
+                      ],
+                    ),
                   ),
                 );
               },
