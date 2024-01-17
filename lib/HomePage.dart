@@ -4,7 +4,6 @@ import 'package:firebase/Catigories/Add.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'Auth/Login.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key});
@@ -85,15 +84,19 @@ class _HomePageState extends State<HomePage> {
                       dialogType: DialogType.warning,
                       animType: AnimType.rightSlide,
                       title: 'Error',
-                      desc: 'هل انتا متاكد من عمليه الحذف',
-                      btnCancelOnPress: () {},
-                      btnOkOnPress: () async {
+                      desc: 'اختر ماذا تريد',
+                      btnCancelText: "حذف",
+                      btnCancelOnPress: () async {
                         await FirebaseFirestore.instance
                             .collection("categories")
                             .doc(data[index].id)
                             .delete();
                         Navigator.of(context).pushReplacementNamed("homePage");
                       },
+                      btnOkOnPress: () async {
+
+                      },
+                      btnOkText: "تحديث",
                     ).show();
                   },
                   child: Card(
@@ -112,6 +115,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 );
+
               },
             ),
     );
