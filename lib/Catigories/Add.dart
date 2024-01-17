@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/Components/CustomButtonAuth.dart';
-import 'package:firebase/Components/TextFormField.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 class AddCategory extends StatefulWidget {
   const AddCategory({Key? key}) : super(key: key);
 
   @override
   State<AddCategory> createState() => _AddCategoryState();
 }
-
 class _AddCategoryState extends State<AddCategory> {
   final GlobalKey<FormState> formState = GlobalKey<FormState>();
 
@@ -20,6 +18,8 @@ class _AddCategoryState extends State<AddCategory> {
       try {
         DocumentReference response = await FirebaseFirestore.instance.collection('categories').add({
           'name': nameController.text,
+          "id":FirebaseAuth.instance.currentUser!.uid,
+          "user":FirebaseAuth.instance.currentUser!.displayName,
         });
 
         Navigator.of(context).pushReplacementNamed('homePage');
@@ -29,7 +29,6 @@ class _AddCategoryState extends State<AddCategory> {
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

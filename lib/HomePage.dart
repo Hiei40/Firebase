@@ -16,9 +16,12 @@ class _HomePageState extends State<HomePage> {
   List<QueryDocumentSnapshot> data = [];
   bool isloading = true;
   getData() async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection("categories").get();
-    data = querySnapshot.docs; // Use direct assignment instead of addAll
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("categories")
+        .where("id", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get(); // Use get() to retrieve the data
+
+    data = querySnapshot.docs;
     setState(() {});
     isloading = false;
     await Future.delayed(Duration(seconds: 1));
@@ -45,14 +48,19 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () async {
-              GoogleSignIn googleSignIn = GoogleSignIn();
-              await googleSignIn.disconnect();
+              try {
+                GoogleSignIn googleSignIn = GoogleSignIn();
+                await googleSignIn.disconnect();
 
-              await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => Login()),
-                (Route<dynamic> route) => false,
-              );
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => Login()),
+                      (Route<dynamic> route) => false,
+                );
+              } catch (e) {
+                print("Error during logout: $e");
+                // Handle the error, show a message, or take appropriate action.
+              }
             },
             icon: Icon(Icons.exit_to_app),
           )
@@ -69,9 +77,8 @@ class _HomePageState extends State<HomePage> {
               ),
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
-
                 return InkWell(
-                  onLongPress: (){
+                  onLongPress: () {
                     AwesomeDialog(
                       context: context,
                       dialogType: DialogType.warning,
@@ -79,9 +86,12 @@ class _HomePageState extends State<HomePage> {
                       title: 'Error',
                       desc: 'هل انتا متاكد من عمليه الحذف',
                       btnCancelOnPress: () {},
-                      btnOkOnPress: ()async{
-                        await FirebaseFirestore.instance.collection("categories").doc(data[index].id).delete();
-                     Navigator.of(context).pushReplacementNamed("homePage");
+                      btnOkOnPress: () async {
+                        await FirebaseFirestore.instance
+                            .collection("categories")
+                            .doc(data[index].id)
+                            .delete();
+                        Navigator.of(context).pushReplacementNamed("homePage");
                       },
                     ).show();
                   },
