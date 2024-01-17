@@ -13,12 +13,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<QueryDocumentSnapshot> data = [];
-
+  bool isloading = true;
   getData() async {
     QuerySnapshot querySnapshot =
-    await FirebaseFirestore.instance.collection("categories").get();
+        await FirebaseFirestore.instance.collection("categories").get();
     data = querySnapshot.docs; // Use direct assignment instead of addAll
     setState(() {});
+    isloading = false;
+    await Future.delayed(Duration(seconds: 1));
   }
 
   @override
@@ -48,45 +50,49 @@ class _HomePageState extends State<HomePage> {
               await FirebaseAuth.instance.signOut();
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => Login()),
-                    (Route<dynamic> route) => false,
+                (Route<dynamic> route) => false,
               );
             },
             icon: Icon(Icons.exit_to_app),
           )
         ],
       ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisExtent: 250,
-        ),
-        itemCount: data.length,
-        itemBuilder: (BuildContext context, int index) {
-          Map<String, dynamic> categoryData =
-          data[index].data() as Map<String, dynamic>;
+      body: isloading == true
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisExtent: 250,
+              ),
+              itemCount: data.length,
+              itemBuilder: (BuildContext context, int index) {
+                Map<String, dynamic> categoryData =
+                    data[index].data() as Map<String, dynamic>;
 
-          // Make sure to check if 'categories' and 'name' fields exist
-          String categoryName = categoryData.containsKey('name')
-              ? categoryData['name'].toString()
-              : 'No Category';
+                // Make sure to check if 'categories' and 'name' fields exist
+                String categoryName = categoryData.containsKey('name')
+                    ? categoryData['name'].toString()
+                    : 'No Category';
 
-          return Card(
-            child: Column(
-              children: [
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Image.asset(
-                      "Image/kisspng-emoji-file-folders-directory-computer-icons-txt-file-5acd8ad8c2a790.3510068315234198647973.png",
-                    ),
+                return Card(
+                  child: Column(
+                    children: [
+                      Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Image.asset(
+                            "Image/kisspng-emoji-file-folders-directory-computer-icons-txt-file-5acd8ad8c2a790.3510068315234198647973.png",
+                          ),
+                        ),
+                      ),
+                      Text(categoryName),
+                    ],
                   ),
-                ),
-                Text(categoryName),
-              ],
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
