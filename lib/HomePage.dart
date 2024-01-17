@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase/Catigories/Add.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -53,9 +54,9 @@ class _HomePageState extends State<HomePage> {
                 await googleSignIn.disconnect();
 
                 await FirebaseAuth.instance.signOut();
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => Login()),
-                      (Route<dynamic> route) => false,
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddCategory()),
                 );
               } catch (e) {
                 print("Error during logout: $e");

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/Components/CustomButtonAuth.dart';
+import 'package:firebase/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 class AddCategory extends StatefulWidget {
   const AddCategory({Key? key}) : super(key: key);
@@ -12,16 +14,24 @@ class _AddCategoryState extends State<AddCategory> {
   final GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   TextEditingController nameController = TextEditingController(); // Move the controller outside the method
+bool isloading=false;
 
   addUser() async {
     if (formState.currentState!.validate()) {
       try {
+        isloading=true;
+        setState(() {
+
+        });
         DocumentReference response = await FirebaseFirestore.instance.collection('categories').add({
           'name': nameController.text,
           "id":FirebaseAuth.instance.currentUser!.uid,
           "user":FirebaseAuth.instance.currentUser!.displayName,
         });
+        isloading=false;
+setState(() {
 
+});
         Navigator.of(context).pushReplacementNamed('homePage');
         print(response);
       } catch (e) {
@@ -37,7 +47,7 @@ class _AddCategoryState extends State<AddCategory> {
       ),
       body: Form(
         key: formState,
-        child: Column(
+        child: isloading?Center(child: CircularProgressIndicator(),):Column(
           children: [
             Container(
               child: Padding(
