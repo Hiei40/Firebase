@@ -1,0 +1,87 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
+import '../Components/CustomButtonAuth.dart';
+
+class EditCategory extends StatefulWidget {
+  final String docid;
+  final String oldname;
+  const EditCategory({Key? key, required this.docid, required this.oldname}) : super(key: key);
+
+  @override
+  State<EditCategory> createState() => _EditCategoryState();
+}
+
+class _EditCategoryState extends State<EditCategory> {
+  final GlobalKey<FormState> formState = GlobalKey<FormState>();
+
+  TextEditingController nameController =
+      TextEditingController(); // Move the controller outside the method
+  bool isloading = false;
+
+  editUser() async {
+    if (formState.currentState!.validate()) {
+      try {
+        isloading = true;
+        setState(() {});
+        await FirebaseFirestore.instance.collection('categories').doc(widget.docid).update({
+          "name": nameController.text,
+        });
+        isloading = false;
+        Navigator.of(context).pushReplacementNamed('homePage');
+      } catch (e) {
+        print('Error $e');
+      }
+    }
+  }
+
+
+  @override
+  void initState(){
+    nameController.text=widget.oldname;
+  }
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Add Category'),
+      ),
+      body: Form(
+        key: formState,
+        child: isloading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20.0,
+                        horizontal: 25,
+                      ),
+                      child: TextFormField(
+                        controller:
+                            nameController, // Use the controller for the TextFormField
+                        decoration: InputDecoration(
+                          hintText: 'Enter Name',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Can't be empty";
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Custombuttonauth(
+                    onPressed: editUser,
+                    Title: 'Edit',
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+}

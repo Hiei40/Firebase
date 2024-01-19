@@ -1,5 +1,6 @@
 import 'package:firebase/Auth/Login.dart';
 import 'package:firebase/Catigories/Add.dart';
+import 'package:firebase/Catigories/Edit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,8 @@ appBarTheme: AppBarTheme(
         "login": (context) => Login(),
         "homePage": (context) => HomePage(), // Make sure this is defined
       "addcategory":(context)=>AddCategory(),
+
+
       },
     );
   }

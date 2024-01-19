@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/Catigories/Add.dart';
+import 'package:firebase/Catigories/Edit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -93,12 +94,23 @@ class _HomePageState extends State<HomePage> {
                             .delete();
                         Navigator.of(context).pushReplacementNamed("homePage");
                       },
+                      btnOkText: "تحديث",
                       btnOkOnPress: () async {
 
-                      },
-                      btnOkText: "تحديث",
-                    ).show();
-                  },
+                        Navigator.of(context).push(
+    MaterialPageRoute(
+    builder: (context) => EditCategory(
+    docid: data[index].id,
+    oldname: data[index]['name'],
+    ),
+    ),
+    );
+    },
+    )..show();
+
+                    },
+
+
                   child: Card(
                     child: Column(
                       children: [
