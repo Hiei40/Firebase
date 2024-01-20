@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
 appBarTheme: AppBarTheme(
-  backgroundColor: Colors.grey[50],
+  backgroundColor: Colors.grey[80],
   titleTextStyle: TextStyle(color: Colors.orange,fontSize: 17,fontWeight: FontWeight.bold),
     iconTheme: IconThemeData(
     color: Colors.orange,
@@ -55,7 +55,7 @@ appBarTheme: AppBarTheme(
         "login": (context) => Login(),
         "homePage": (context) => HomePage(), // Make sure this is defined
       "addcategory":(context)=>AddCategory(),
-
+       
 
       },
     );

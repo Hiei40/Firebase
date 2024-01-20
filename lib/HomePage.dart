@@ -96,21 +96,18 @@ class _HomePageState extends State<HomePage> {
                       },
                       btnOkText: "تحديث",
                       btnOkOnPress: () async {
-
                         Navigator.of(context).push(
-    MaterialPageRoute(
-    builder: (context) => EditCategory(
-    docid: data[index].id,
-    oldname: data[index]['name'],
-    ),
-    ),
-    );
-    },
-    )..show();
+                          MaterialPageRoute(
+                            builder: (context) => EditCategory(
+                              docid: data[index].id,
+                              oldname: data[index]['name'],
+                            ),
+                          ),
 
-                    },
-
-
+                        );
+                      },
+                    )..show();
+                  },
                   child: Card(
                     child: Column(
                       children: [
@@ -127,7 +124,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 );
-
               },
             ),
     );

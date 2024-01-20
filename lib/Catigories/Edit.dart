@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase/HomePage.dart';
 import 'package:flutter/material.dart';
 
 import '../Components/CustomButtonAuth.dart';
@@ -28,7 +29,13 @@ class _EditCategoryState extends State<EditCategory> {
           "name": nameController.text,
         });
         isloading = false;
-        Navigator.of(context).pushReplacementNamed('homePage');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+            fullscreenDialog: true, // Set this to true
+          ),
+        );
       } catch (e) {
         print('Error $e');
       }
@@ -85,3 +92,4 @@ class _EditCategoryState extends State<EditCategory> {
     );
   }
 }
+// Navigator.of(context).pushReplacementNamed('homePage');
