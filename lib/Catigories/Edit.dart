@@ -15,7 +15,7 @@ class EditCategory extends StatefulWidget {
 
 class _EditCategoryState extends State<EditCategory> {
   final GlobalKey<FormState> formState = GlobalKey<FormState>();
-
+CollectionReference categories=FirebaseFirestore.instance.collection("categories");
   TextEditingController nameController =
       TextEditingController(); // Move the controller outside the method
   bool isloading = false;
@@ -25,17 +25,10 @@ class _EditCategoryState extends State<EditCategory> {
       try {
         isloading = true;
         setState(() {});
-        await FirebaseFirestore.instance.collection('categories').doc(widget.docid).update({
-          "name": nameController.text,
-        });
+      await categories.doc("13213").set({"name":nameController.text},SetOptions(merge: true));
         isloading = false;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-            fullscreenDialog: true, // Set this to true
-          ),
-        );
+        Navigator.of(context).pushNamedAndRemoveUntil("homePage", (route) => false);
+
       } catch (e) {
         print('Error $e');
       }

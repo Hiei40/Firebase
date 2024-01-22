@@ -15,6 +15,8 @@ class _AddCategoryState extends State<AddCategory> {
 
   TextEditingController nameController = TextEditingController(); // Move the controller outside the method
 bool isloading=false;
+//SET -update
+  //set-add
 
   addUser() async {
     if (formState.currentState!.validate()) {
