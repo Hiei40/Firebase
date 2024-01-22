@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase/HomePage.dart';
 import 'package:flutter/material.dart';
 
 import '../Components/CustomButtonAuth.dart';
@@ -35,10 +34,16 @@ CollectionReference categories=FirebaseFirestore.instance.collection("categories
     }
   }
 
+@override
 
-  @override
-  void initState(){
-    nameController.text=widget.oldname;
+
+void initState() {
+  nameController.text = widget.oldname;
+  super.initState(); // Invoke the overridden method from the superclass
+}
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
   }
   Widget build(BuildContext context) {
     return Scaffold(

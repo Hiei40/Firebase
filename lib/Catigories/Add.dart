@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/Components/CustomButtonAuth.dart';
-import 'package:firebase/HomePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 class AddCategory extends StatefulWidget {
   const AddCategory({Key? key}) : super(key: key);
@@ -17,7 +15,10 @@ class _AddCategoryState extends State<AddCategory> {
 bool isloading=false;
 //SET -update
   //set-add
-
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+  }
   addUser() async {
     if (formState.currentState!.validate()) {
       try {
