@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/Catigories/Add.dart';
 import 'package:firebase/Catigories/Edit.dart';
+import 'package:firebase/note/View.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -79,6 +80,9 @@ class _HomePageState extends State<HomePage> {
               itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
                 return InkWell(
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NoteView(categoryid:data[index].id,)));
+                  },
                   onLongPress: () {
                     AwesomeDialog(
                       context: context,
