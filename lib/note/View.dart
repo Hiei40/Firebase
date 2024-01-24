@@ -19,12 +19,11 @@ class _NoteViewState extends State<NoteView> {
   bool isloading = true;
   getData() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection("note").doc(widget.categoryid).collection("note").get();
+        .collection("categories").doc(widget.categoryid).collection("note").get();
 
-    data = querySnapshot.docs;
+    data.addAll(querySnapshot.docs);
     setState(() {});
     isloading = false;
-    await Future.delayed(Duration(seconds: 1));
   }
 
   @override

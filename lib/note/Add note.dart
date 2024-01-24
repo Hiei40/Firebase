@@ -19,22 +19,17 @@ class _AddnoteState extends State<Addnote> {
   bool isloading=false;
 //SET -update
   //set-add
-  void dispose() {
-    super.dispose();
-    note.dispose();
-  }
+
   void addnote() async {
-    CollectionReference collectionnote =
+    CollectionReference Collectionnote =
     FirebaseFirestore.instance.collection('categories').doc(widget.docid).collection("note");
 
     if (formState.currentState!.validate()) {
       try {
         isloading = true;
         setState(() {});
-        DocumentReference response = await collectionnote.add({
-          'note': note.text,
-          "id": FirebaseAuth.instance.currentUser!.uid,
-          "user": FirebaseAuth.instance.currentUser!.displayName,
+        DocumentReference response = await Collectionnote.add({
+          "note": note.text,
         });
         isloading = false;
         setState(() {});
@@ -45,7 +40,10 @@ class _AddnoteState extends State<Addnote> {
       }
     }
   }
-
+  void dispose() {
+    super.dispose();
+    note.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
