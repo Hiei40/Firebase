@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/Components/CustomButtonAuth.dart';
-import 'package:firebase/note/View.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 class Addnote extends StatefulWidget {
@@ -34,17 +33,18 @@ class _AddnoteState extends State<Addnote> {
         setState(() {});
         DocumentReference response = await collectionnote.add({
           'note': note.text,
+          "id": FirebaseAuth.instance.currentUser!.uid,
+          "user": FirebaseAuth.instance.currentUser!.displayName,
         });
         isloading = false;
         setState(() {});
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NoteView(categoryid: widget.docid)),);
+        Navigator.of(context).pushReplacementNamed('homePage');
         print(response);
       } catch (e) {
         print('Error $e');
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

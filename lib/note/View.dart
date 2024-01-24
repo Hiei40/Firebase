@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class NoteView extends StatefulWidget {
- final String categoryid;
+  final String categoryid;
   const NoteView({Key? key, required this.categoryid});
 
   @override
@@ -19,18 +19,13 @@ class _NoteViewState extends State<NoteView> {
   bool isloading = true;
   getData() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection("note")
-        .doc(widget.categoryid)
-        .collection("note")
-        .get();
+        .collection("note").doc(widget.categoryid).collection("note").get();
 
     data = querySnapshot.docs;
-    print("Retrieved Data: $data");  // Print data to console
     setState(() {});
     isloading = false;
+    await Future.delayed(Duration(seconds: 1));
   }
-
-
 
   @override
   void initState() {
@@ -75,12 +70,12 @@ class _NoteViewState extends State<NoteView> {
           ? Center(
         child: CircularProgressIndicator(),
       )
-          :GridView.builder(
+          : GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisExtent: 250,
         ),
-        itemCount: 5,
+        itemCount: data.length,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onLongPress: () {
@@ -92,30 +87,42 @@ class _NoteViewState extends State<NoteView> {
                 desc: 'اختر ماذا تريد',
                 btnCancelText: "حذف",
                 btnCancelOnPress: () async {
-                  // Handle delete logic here if needed
+                  // await FirebaseFirestore.instance
+                  //     .collection("categories")
+                  //     .doc(data[index].id)
+                  //     .delete();
+                  // Navigator.of(context).pushReplacementNamed("homePage");
                 },
                 btnOkText: "تحديث",
                 btnOkOnPress: () async {
-                  // Handle update logic here if needed
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => EditCategory(
+                  //       docid: data[index].id,
+                  //       oldname: data[index]['name'],
+                  //     ),
+                  //   ),
+                  //
+                  // );
                 },
               )..show();
             },
             child: Card(
               child: Column(
                 children: [
-                  // Display the note name
-                  Text("55"),
-
-
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("${data[index]['note']}"),
+                    ],
+                  ),
                 ],
               ),
             ),
           );
         },
       ),
-
-
-
     );
   }
 }
