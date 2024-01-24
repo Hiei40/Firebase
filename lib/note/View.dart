@@ -19,13 +19,18 @@ class _NoteViewState extends State<NoteView> {
   bool isloading = true;
   getData() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection("note").doc(widget.categoryid).collection("note").get();
+        .collection("note")
+        .doc(widget.categoryid)
+        .collection("note")
+        .get();
 
     data = querySnapshot.docs;
+    print("Retrieved Data: $data");  // Print data to console
     setState(() {});
     isloading = false;
-    await Future.delayed(Duration(seconds: 1));
   }
+
+
 
   @override
   void initState() {
@@ -70,12 +75,12 @@ class _NoteViewState extends State<NoteView> {
           ? Center(
         child: CircularProgressIndicator(),
       )
-          : GridView.builder(
+          :GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisExtent: 250,
         ),
-        itemCount: data.length,
+        itemCount: 5,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onLongPress: () {
@@ -87,42 +92,30 @@ class _NoteViewState extends State<NoteView> {
                 desc: 'اختر ماذا تريد',
                 btnCancelText: "حذف",
                 btnCancelOnPress: () async {
-                  // await FirebaseFirestore.instance
-                  //     .collection("categories")
-                  //     .doc(data[index].id)
-                  //     .delete();
-                  // Navigator.of(context).pushReplacementNamed("homePage");
+                  // Handle delete logic here if needed
                 },
                 btnOkText: "تحديث",
                 btnOkOnPress: () async {
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => EditCategory(
-                  //       docid: data[index].id,
-                  //       oldname: data[index]['name'],
-                  //     ),
-                  //   ),
-                  //
-                  // );
+                  // Handle update logic here if needed
                 },
               )..show();
             },
             child: Card(
               child: Column(
                 children: [
-                  Row(
-                   mainAxisSize: MainAxisSize.min,
-mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("${data[index]['note']}"),
-                    ],
-                  ),
+                  // Display the note name
+                  Text("55"),
+
+
                 ],
               ),
             ),
           );
         },
       ),
+
+
+
     );
   }
 }
