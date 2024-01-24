@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/Catigories/Add.dart';
+import 'package:firebase/note/Add%20note.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -37,7 +38,7 @@ class _NoteViewState extends State<NoteView> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).pushReplacementNamed("addcategory");
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Addnote(docid:widget.categoryid)));
         },
         backgroundColor: Colors.orange,
         child: Icon(Icons.add),
