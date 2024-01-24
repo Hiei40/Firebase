@@ -107,16 +107,15 @@ class _NoteViewState extends State<NoteView> {
               )..show();
             },
             child: Card(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
                     children: [
                       Text("${data[index]['note']}"),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           );
