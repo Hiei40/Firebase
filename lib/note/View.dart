@@ -20,7 +20,10 @@ class _NoteViewState extends State<NoteView> {
   bool isloading = true;
   getData() async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection("categories").doc(widget.categoryid).collection("note").get();
+        .collection("categories")
+        .doc(widget.categoryid)
+        .collection("note")
+        .get();
 
     data.addAll(querySnapshot.docs);
     setState(() {});
@@ -38,7 +41,8 @@ class _NoteViewState extends State<NoteView> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Addnote(docid:widget.categoryid)));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => Addnote(docid: widget.categoryid)));
         },
         backgroundColor: Colors.orange,
         child: Icon(Icons.add),
@@ -68,34 +72,58 @@ class _NoteViewState extends State<NoteView> {
       ),
       body: isloading == true
           ? Center(
-        child: CircularProgressIndicator(),
-      )
+              child: CircularProgressIndicator(),
+            )
           : GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisExtent: 250,
-        ),
-        itemCount: data.length,
-        itemBuilder: (BuildContext context, int index) {
-          return InkWell(
-          onTap: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Editnote(notedocid: data[index].id, Categorydocid: widget.categoryid, Value: data[index]['note'])));
-          },
-            child: Card(
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      Text("${data[index]['note']}"),
-                    ],
-                  ),
-                ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisExtent: 250,
               ),
+              itemCount: data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Editnote(
+                            notedocid: data[index].id,
+                            Categorydocid: widget.categoryid,
+                            Value: data[index]['note'])));
+                  },
+                  onLongPress: () {
+                    AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.rightSlide,
+                      title: 'Error',
+                      desc: 'هل انتا متاكد من عمليه الحذف',
+                      btnCancelText: "حذف",
+                      btnOkOnPress: (){},
+                      btnOkText: "الغاء",
+                      btnCancelOnPress: () async {
+                        await FirebaseFirestore.instance
+                            .collection("categories")
+                            .doc(widget.categoryid).collection("note").doc(data[index].id)
+                            .delete();
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NoteView(categoryid: widget.categoryid,)));
+                      },
+    ).show();
+
+                  },
+                  child: Card(
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          children: [
+                            Text("${data[index]['note']}"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
