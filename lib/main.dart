@@ -1,12 +1,7 @@
-import 'package:firebase/Auth/Login.dart';
-import 'package:firebase/Catigories/Add.dart';
-import 'package:firebase/Catigories/Edit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-import 'Auth/Signin.dart';
-import 'HomePage.dart';
+import 'Filter.dart';
 import 'Auth/firebase_options.dart';
 
 void main() async {
@@ -46,18 +41,20 @@ appBarTheme: AppBarTheme(
 ),
       ),
       debugShowCheckedModeBanner: false,
-      home: (FirebaseAuth.instance.currentUser != null &&
-              FirebaseAuth.instance.currentUser!.emailVerified)
-          ? HomePage()
-          : Login(),
-      routes: {
-        "signup": (context) => SignUp(),
-        "login": (context) => Login(),
-        "homePage": (context) => HomePage(), // Make sure this is defined
-      "addcategory":(context)=>AddCategory(),
-       
+      home: FilterFirestore()
 
-      },
     );
+
   }
 }
+
+// (FirebaseAuth.instance.currentUser != null &&
+//         FirebaseAuth.instance.currentUser!.emailVerified)
+//     ? HomePage()
+//     : Login(),
+// routes: {
+//   "signup": (context) => SignUp(),
+//   "login": (context) => Login(),
+//   "homePage": (context) => HomePage(), // Make sure this is defined
+// "addcategory":(context)=>AddCategory(),
+//
