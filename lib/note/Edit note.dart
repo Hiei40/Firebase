@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/Components/CustomButtonAuth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase/note/View.dart';
 import 'package:flutter/material.dart';
 class Editnote extends StatefulWidget {
   final String notedocid;
-  final String Categoryid;
-  Editnote({Key? key, required this.notedocid, required this.Categoryid}) : super(key: key);
+  final String Categorydocid;
+  final String Value;
+
+  Editnote({Key? key, required this.notedocid, required this.Categorydocid, required this.Value}) : super(key: key);
 
   @override
   State<Editnote> createState() => _EditnoteState();
@@ -20,24 +22,32 @@ class _EditnoteState extends State<Editnote> {
 //SET -update
   //set-add
 
-  void Editnote() async {
+  void edidnote() async {
     CollectionReference Collectionnote =
-    FirebaseFirestore.instance.collection('categories').doc(widget.notedocid).collection("note");
+    FirebaseFirestore.instance.collection('categories').doc(widget.Categorydocid).collection("note");
 
     if (formState.currentState!.validate()) {
       try {
         isloading = true;
         setState(() {});
-       await Collectionnote.doc().update({
-          "note": note.text,
-        });
+       await Collectionnote.doc(widget.notedocid).update({
+          "note": note.text,});
         isloading = false;
         setState(() {});
-        Navigator.of(context).pushReplacementNamed('homePage');
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>
+        NoteView(categoryid: widget.Categorydocid)
+        ));
+
       } catch (e) {
         print('Error $e');
       }
     }
+  }
+  @override
+  void initState() {
+    note.text=widget.Value;
+    // TODO: implement initState
+    super.initState();
   }
   void dispose() {
     super.dispose();
@@ -47,7 +57,7 @@ class _EditnoteState extends State<Editnote> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Note'),
+        title: Text('Edit Note'),
       ),
       body: Form(
         key: formState,
@@ -75,10 +85,9 @@ class _EditnoteState extends State<Editnote> {
               ),
             ),
             Custombuttonauth(
-              onPressed: () => Editnote(), // Change Widget.notedocid to widget.notedocid
-              Title: 'Add',
+              onPressed: edidnote,
+              Title: 'edit',
             ),
-
           ],
         ),
       ),
