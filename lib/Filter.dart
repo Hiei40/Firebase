@@ -13,7 +13,7 @@ class _FilterFirestoreState extends State<FilterFirestore> {
   List<DocumentSnapshot> data = [];
   initialData() async {
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    QuerySnapshot userdata = await users.where("age",isGreaterThan: 30).get();
+    QuerySnapshot userdata = await users.where("Lang",arrayContains: "Ara").get();
     userdata.docs.forEach((element) {
       data.add(element);
     });
