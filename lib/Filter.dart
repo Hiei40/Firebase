@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class FilterFirestore extends StatefulWidget {
@@ -11,22 +10,19 @@ class FilterFirestore extends StatefulWidget {
 
 class _FilterFirestoreState extends State<FilterFirestore> {
   List<DocumentSnapshot> data = [];
-  initialData() async {
+
+  Future<void> initialData() async {
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    QuerySnapshot userdata = await users.where("Lang",arrayContains: "Ara").get();
-    userdata.docs.forEach((element) {
-      data.add(element);
-    });
+    QuerySnapshot userdata = await users.orderBy("age", descending: true).get();
+    data = userdata.docs;
     setState(() {});
   }
+
   @override
   void initState() {
     super.initState();
     initialData();
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +34,35 @@ class _FilterFirestoreState extends State<FilterFirestore> {
         child: ListView.builder(
           itemCount: data.length,
           itemBuilder: (context, index) {
-            return Card(
-              child: ListTile(
-                subtitle: Text("age:${data[index]['age']}",),
-                title: Text(data[index]['username'],
-                  style: TextStyle(fontSize: 30),
+            return GestureDetector(
+              onTap: () {
+                 DocumentReference documentReference =
+                 FirebaseFirestore.instance.collection('users').doc(data[index].id);
+                 // documentReference.update({"money": data[index]["money"] + 100});
+                 FirebaseFirestore.instance.runTransaction((transaction) async {
+                   DocumentSnapshot snapshot = await transaction.get(documentReference);
+                   if (snapshot.exists) {
+                     var snapshotData = snapshot.data();
+                     if (snapshotData is Map<String, dynamic>) {
+                       int money = snapshotData['money'] + 100;
+                       transaction.update(documentReference, {"money": money});
+                     }
+                   }
+                 }).then((value) {
+                   Navigator.of(context).pushAndRemoveUntil(
+                       MaterialPageRoute(builder: (context) => FilterFirestore()),
+                           (route) => false);
+                 });
+              },
+              child: Card(
+                child: ListTile(
+                  trailing: Text("Money: ${data[index]['money']}\$"),
+                  subtitle: Text("Age: ${data[index]['age']}"),
+                  title: Text(
+                    data[index]['username'],
+                    style: TextStyle(fontSize: 30),
+                  ),
                 ),
-
               ),
             );
           },
