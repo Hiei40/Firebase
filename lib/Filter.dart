@@ -13,7 +13,7 @@ class _FilterFirestoreState extends State<FilterFirestore> {
 
   Future<void> initialData() async {
     CollectionReference users = FirebaseFirestore.instance.collection("users");
-    QuerySnapshot userdata = await users.orderBy("age", descending: true).get();
+    QuerySnapshot userdata = await users.orderBy("age", descending: false).get();
     data = userdata.docs;
     setState(() {});
   }
@@ -35,24 +35,28 @@ class _FilterFirestoreState extends State<FilterFirestore> {
           itemCount: data.length,
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: () {
-                 DocumentReference documentReference =
-                 FirebaseFirestore.instance.collection('users').doc(data[index].id);
-                 // documentReference.update({"money": data[index]["money"] + 100});
-                 FirebaseFirestore.instance.runTransaction((transaction) async {
-                   DocumentSnapshot snapshot = await transaction.get(documentReference);
-                   if (snapshot.exists) {
-                     var snapshotData = snapshot.data();
-                     if (snapshotData is Map<String, dynamic>) {
-                       int money = snapshotData['money'] + 100;
-                       transaction.update(documentReference, {"money": money});
-                     }
-                   }
-                 }).then((value) {
-                   Navigator.of(context).pushAndRemoveUntil(
-                       MaterialPageRoute(builder: (context) => FilterFirestore()),
-                           (route) => false);
-                 });
+              onTap: (){
+             CollectionReference users=FirebaseFirestore.instance.collection('users');
+             DocumentReference doc1=FirebaseFirestore.instance.collection('users').doc('1');
+             DocumentReference doc2=FirebaseFirestore.instance.collection('users').doc("2");
+
+             WriteBatch batch=FirebaseFirestore.instance.batch();
+
+batch.set(doc1, {
+  "username":"mohamed",
+  "money":120,
+  "phone":"+12004545452",
+  "age":"45"
+
+});
+
+             batch.set(doc2, {
+               "username":"jkbk",
+               "money":250,
+               "phone":"+2004512215",
+               "age":"50"
+
+             });
               },
               child: Card(
                 child: ListTile(
