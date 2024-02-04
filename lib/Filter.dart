@@ -9,24 +9,8 @@ class FilterFirestore extends StatefulWidget {
 }
 
 class _FilterFirestoreState extends State<FilterFirestore> {
-  List<DocumentSnapshot> data = [];
-
-  Future<void> initialData() async {
-    CollectionReference users = FirebaseFirestore.instance.collection("users");
-    QuerySnapshot userdata = await users.orderBy("age", descending: false).get();
-   userdata.docs.forEach((element) {
-     data.add(element);
-
-   });
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-
-    super.initState();
-    initialData();
-  }
+  final Stream<QuerySnapshot> usersStream =
+      FirebaseFirestore.instance.collection('users').snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -35,23 +19,60 @@ class _FilterFirestoreState extends State<FilterFirestore> {
         title: Text('Filter'),
       ),
       body: Container(
-        child: ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
+        padding: const EdgeInsets.all(10),
+        child: StreamBuilder(
+          stream: usersStream,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            }
 
-              },
-              child: Card(
-                child: ListTile(
-                  trailing: Text("Money: ${data[index]['money']}\$"),
-                  subtitle: Text("Age: ${data[index]['age']}"),
-                  title: Text(
-                    data[index]['username'],
-                    style: TextStyle(fontSize: 30),
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text("Loading....");
+            }
+
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    DocumentReference documentReference = FirebaseFirestore
+                        .instance
+                        .collection('users')
+                        .doc(snapshot.data!.docs[index].id);
+                    FirebaseFirestore.instance
+                        .runTransaction((transaction) async {
+                      DocumentSnapshot snapshot =
+                          await transaction.get(documentReference);
+                      if (snapshot.exists) {
+                        var snapshotData = snapshot.data();
+                        if (snapshotData is Map<String, dynamic>) {
+                          int money = snapshotData['money'] + 100;
+                          transaction
+                              .update(documentReference, {"money": money});
+                        }
+                      }
+                    }).then((value) {
+// Navigator.of(context).pushAndRemoveUntil(
+// MaterialPageRoute(builder: (context) => FilterFirestore()),
+// (route) => false);
+                    });
+                  },
+                  child: Card(
+                    child: ListTile(
+                      trailing: Text(
+                          "Money: ${snapshot.data!.docs[index]['money']}\$"),
+                      subtitle:
+                          Text("Age: ${snapshot.data!.docs[index]['age']}"),
+                      title: Text(
+                        snapshot.data!.docs[index]['username'],
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         ),
@@ -60,10 +81,6 @@ class _FilterFirestoreState extends State<FilterFirestore> {
   }
 }
 
-
-
-// DocumentReference documentReference =
-// FirebaseFirestore.instance.collection('users').doc(data[index].id);
 // documentReference.update({"money": data[index]["money"] + 100});
 // FirebaseFirestore.instance.runTransaction((transaction) async {
 // DocumentSnapshot snapshot = await transaction.get(documentReference);
