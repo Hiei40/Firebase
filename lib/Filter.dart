@@ -1,5 +1,8 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FilterFirestore extends StatefulWidget {
   const FilterFirestore({Key? key}) : super(key: key);
@@ -11,7 +14,28 @@ class FilterFirestore extends StatefulWidget {
 class _FilterFirestoreState extends State<FilterFirestore> {
   final Stream<QuerySnapshot> usersStream =
       FirebaseFirestore.instance.collection('users').snapshots();
+File? file;
+getImage()async{
 
+  final ImagePicker picker = ImagePicker();
+// Pick an image.
+  final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+// Capture a photo.
+  final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+// Pick a video.
+  final XFile? galleryVideo =
+      await picker.pickVideo(source: ImageSource.gallery);
+// Capture a video.
+  final XFile? cameraVideo = await picker.pickVideo(source: ImageSource.camera);
+// Pick multiple images.
+  final List<XFile> images = await picker.pickMultiImage();
+// Pick singe image or video.
+  final XFile? media = await picker.pickMedia();
+// Pick multiple images and videos.
+  final List<XFile> medias = await picker.pickMultipleMedia();
+
+
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
