@@ -16,23 +16,15 @@ class _FilterFirestoreState extends State<FilterFirestore> {
   final Stream<QuerySnapshot> usersStream =
   FirebaseFirestore.instance.collection('users').snapshots();
   File? file;
-
   getImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+  final ImagePicker picker = ImagePicker();
+  final XFile? photo = await picker.pickImage(source: ImageSource.camera);
 
-      file = File(photo!.path);
-      setState(() {});
-   }
-  // File _image;
-  // final ImagePicker _picker = ImagePicker();
-  // Future getImage() async {
-  //   var pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-  //
-  //   setState(() {
-  //     _image = File(pickedFile.path);
-  //   });
-  // }
+  if (photo != null) {
+  file = File(photo.path);
+  setState(() {});
+  }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +36,7 @@ class _FilterFirestoreState extends State<FilterFirestore> {
           MaterialButton(onPressed: ()async{
            await getImage();
           },child: Text("Get Image Camera"),),
+          if (file != null) Image.file(file!, width: 100, height: 100, fit: BoxFit.fill,)
 
         ],)
       ),
