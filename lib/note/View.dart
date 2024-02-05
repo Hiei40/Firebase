@@ -116,11 +116,18 @@ class _NoteViewState extends State<NoteView> {
                         child: Column(
                           children: [
                             Text("${data[index]['note']}"),
+                            if(data[index]["url"] != "none")
+                              Image.network(
+                                data[index]["url"],
+                                height: 100, // Set a specific height for the image
+                                width: 100,  // Set a specific width for the image
+                              ),
                           ],
                         ),
                       ),
                     ),
                   ),
+
                 );
               },
             ),

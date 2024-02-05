@@ -45,7 +45,12 @@ appBarTheme: AppBarTheme(
 ),
       ),
       debugShowCheckedModeBanner: false,
-      home: FilterFirestore(),
+      home: (FirebaseAuth.instance.currentUser != null &&
+          FirebaseAuth.instance.currentUser!.emailVerified)
+          ? HomePage()
+          : Login(),
+
+
     routes: {
       "signup": (context) => SignUp(),
       "login": (context) => Login(),
@@ -59,9 +64,3 @@ appBarTheme: AppBarTheme(
   }
 }
 
-// (FirebaseAuth.instance.currentUser != null &&
-//         FirebaseAuth.instance.currentUser!.emailVerified)
-//     ? HomePage()
-//     : Login(),
-
-//
