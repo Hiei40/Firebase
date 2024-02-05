@@ -25,7 +25,7 @@ class _FilterFirestoreState extends State<FilterFirestore> {
 
       file = File(photo!.path);
       var imagename=basename(photo.path);
-      var refStorage = FirebaseStorage.instance.ref(imagename);
+      var refStorage = FirebaseStorage.instance.ref("images/$imagename");
       await refStorage.putFile(file!); // This line was missing in your code
    url=await refStorage.getDownloadURL();
       setState(() {});
