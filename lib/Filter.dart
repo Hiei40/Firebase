@@ -13,19 +13,18 @@ class FilterFirestore extends StatefulWidget {
 
 class _FilterFirestoreState extends State<FilterFirestore> {
   final Stream<QuerySnapshot> usersStream =
-  FirebaseFirestore.instance.collection('users').snapshots();
+      FirebaseFirestore.instance.collection('users').snapshots();
   File? file;
 
   getImage() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? photo =
-    await picker.pickImage(source: ImageSource.camera);
+    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
 
     if (photo != null) {
       file = File(photo.path);
       var refStorage = FirebaseStorage.instance.ref("1.jpg");
       await refStorage.putFile(file!); // This line was missing in your code
-           setState(() {});
+      setState(() {});
     }
   }
 
@@ -57,7 +56,6 @@ class _FilterFirestoreState extends State<FilterFirestore> {
     );
   }
 }
-
 
 // documentReference.update({"money": data[index]["money"] + 100});
 // FirebaseFirestore.instance.runTransaction((transaction) async {
