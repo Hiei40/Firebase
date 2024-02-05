@@ -1,4 +1,5 @@
 import 'package:firebase/Auth/Login.dart';
+import 'package:firebase/Test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -45,10 +46,7 @@ appBarTheme: AppBarTheme(
 ),
       ),
       debugShowCheckedModeBanner: false,
-      home: (FirebaseAuth.instance.currentUser != null &&
-          FirebaseAuth.instance.currentUser!.emailVerified)
-          ? HomePage()
-          : Login(),
+      home: Test(),
 
 
     routes: {
@@ -63,4 +61,8 @@ appBarTheme: AppBarTheme(
 
   }
 }
-
+//
+// (FirebaseAuth.instance.currentUser != null &&
+// FirebaseAuth.instance.currentUser!.emailVerified)
+// ? HomePage()
+// : Login(),
