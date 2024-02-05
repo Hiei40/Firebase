@@ -4,6 +4,7 @@ import 'package:firebase/Catigories/Add.dart';
 import 'package:firebase/note/Add%20note.dart';
 import 'package:firebase/note/Edit%20note.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -104,6 +105,11 @@ class _NoteViewState extends State<NoteView> {
                             .collection("categories")
                             .doc(widget.categoryid).collection("note").doc(data[index].id)
                             .delete();
+                     if(data[index]["url"]!="none"){
+                       FirebaseStorage.instance.refFromURL(data[index]["url"]).delete();
+
+                     }
+
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NoteView(categoryid: widget.categoryid,)));
                       },
     ).show();
