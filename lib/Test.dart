@@ -14,10 +14,35 @@ class _TestState extends State<Test> {
    print("================");
 print(mytoken);
  }
+ requestPermission()async{
+   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+   NotificationSettings settings = await messaging.requestPermission(
+     alert: true,
+     announcement: false,
+     badge: true,
+     carPlay: false,
+     criticalAlert: false,
+     provisional: false,
+     sound: true,
+   );
+
+   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+     print('User granted permission');
+   } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+     print('User granted provisional permission');
+   } else {
+     print('User declined or has not accepted permission');
+   }
+
+ }
  void initState() {
    super.initState();
+
    WidgetsBinding.instance!.addPostFrameCallback((_) {
      getToken();
+     requestPermission();
+
    });
  }
 
