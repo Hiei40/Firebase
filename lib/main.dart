@@ -46,7 +46,7 @@ appBarTheme: AppBarTheme(
 ),
       ),
       debugShowCheckedModeBanner: false,
-      home: Test(),
+      home: HomePage(),
 
 
     routes: {
@@ -55,8 +55,8 @@ appBarTheme: AppBarTheme(
       "homePage": (context) => HomePage(), // Make sure this is defined
       "addcategory": (context) => AddCategory(),
       "FilterFirestore": (context) => FilterFirestore(),
-    }
 
+    }
    );
 
   }

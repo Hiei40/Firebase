@@ -13,7 +13,6 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
 class _HomePageState extends State<HomePage> {
   List<QueryDocumentSnapshot> data = [];
   bool isloading = true;
@@ -29,6 +28,7 @@ class _HomePageState extends State<HomePage> {
     await Future.delayed(Duration(seconds: 1));
   }
 
+  var x=0;
   @override
   void initState() {
     getData();
@@ -96,7 +96,8 @@ class _HomePageState extends State<HomePage> {
                             .collection("categories")
                             .doc(data[index].id)
                             .delete();
-                        Navigator.of(context).pushReplacementNamed("homePage");
+                        Navigator.of(context).pushReplacementNamed("homePage",
+                        arguments: x.toString());
                       },
                       btnOkText: "تحديث",
                       btnOkOnPress: () async {
