@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'Auth/Login.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key});
 
@@ -51,13 +53,11 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             onPressed: () async {
               try {
-                GoogleSignIn googleSignIn = GoogleSignIn();
-                await googleSignIn.disconnect();
-
                 await FirebaseAuth.instance.signOut();
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddCategory()),
+                  MaterialPageRoute(builder: (context) => const Login()),
+                      (Route<dynamic> route) => false,
                 );
               } catch (e) {
                 print("Error during logout: $e");
@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage> {
             },
             icon: Icon(Icons.exit_to_app),
           )
+
         ],
       ),
       body: isloading == true
